@@ -6,9 +6,9 @@ public class PlayerController : MonoBehaviour
     {
         GetComponent<Renderer>().enabled = false;
     }
-    
+
     void Update() {
     
-}
+    }
 }
 
