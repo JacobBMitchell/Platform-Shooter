@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class CameraRelativePlayerMovement : MonoBehaviour
 {
     [SerializeField] float speed = 5f;
     [SerializeField] Camera playerCamera;
@@ -10,7 +9,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        GetComponent<Renderer>().enabled = false;
     }
 
     void FixedUpdate()
@@ -21,7 +19,7 @@ public class PlayerController : MonoBehaviour
         Vector3 input = new Vector3(h, 0, v);
         if (input.magnitude > 1) input.Normalize();
 
-        // Get camera's forward and right, ignoring pitch
+        // Get camera's forward and right, ignore y for ground movement
         Vector3 camForward = playerCamera.transform.forward;
         Vector3 camRight = playerCamera.transform.right;
         camForward.y = 0;
@@ -29,9 +27,8 @@ public class PlayerController : MonoBehaviour
         camForward.Normalize();
         camRight.Normalize();
 
-        // Calculate move direction relative to camera
-        Vector3 moveDir = camForward * input.z + camRight * input.x;
-        Vector3 move = speed * Time.fixedDeltaTime * moveDir;
+        // Move relative to camera
+        Vector3 move = (camForward * input.z + camRight * input.x) * speed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + move);
     }
 }
