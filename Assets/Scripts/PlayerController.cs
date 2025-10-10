@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float speed = 5f;
     [SerializeField] Camera playerCamera;
     Rigidbody rb;
+    RaycastHit hit = new RaycastHit();
+    bool isGrounded;
+
 
     void Start()
     {
@@ -15,6 +18,29 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        Move();
+        Jump();
+    }
+
+    private void Jump()
+    {
+        Debug.DrawRay(transform.position, Vector3.down * 1.1f, Color.red);
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f))
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
+
+        if (Input.GetButton("Jump") && isGrounded)
+        {
+            rb.AddForce(Vector3.up * 5, ForceMode.Impulse);
+        }
+    }
+
+    private void Move(){
         // Get input
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
